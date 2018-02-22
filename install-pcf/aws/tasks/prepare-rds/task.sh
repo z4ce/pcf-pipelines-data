@@ -1,5 +1,7 @@
 #!/bin/bash
 set -eu
+eval "$(goyamlenv config/aws.yml)"
+eval "$(goyamlenv <(echo "$secrets"))"
 
 echo "$PEM" > pcf.pem
 chmod 0600 pcf.pem

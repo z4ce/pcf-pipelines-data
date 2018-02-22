@@ -1,11 +1,14 @@
 #!/bin/bash
 
 set -eu
+eval "$(goyamlenv config/aws.yml)"
+eval "$(goyamlenv <(echo "$secrets"))"
 
 aws_access_key_id=`terraform state show -state terraform-state/terraform.tfstate aws_iam_access_key.pcf_iam_user_access_key | grep ^id | awk '{print $3}'`
 aws_secret_access_key=`terraform state show -state terraform-state/terraform.tfstate aws_iam_access_key.pcf_iam_user_access_key | grep ^secret | awk '{print $3}'`
 rds_password=`terraform state show -state terraform-state/terraform.tfstate aws_db_instance.pcf_rds | grep ^password | awk '{print $3}'`
 
+pushd config/director
 while read -r line
 do
   `echo "$line" | awk '{print "export "$1"="$3}'`
@@ -13,20 +16,20 @@ done < <(terraform output -state terraform-state/terraform.tfstate)
 
 
 set +e
-read -r -d '' iaas_configuration <<EOF
+cat > iaas_configuration.yml <<EOF
 {
   "access_key_id": "$aws_access_key_id",
   "secret_access_key": "$aws_secret_access_key",
   "vpc_id": "$vpc_id",
   "security_group": "$pcf_security_group",
-  "key_pair_name": "$AWS_KEY_NAME",
+  "key_pair_name": "$aws_key_name",
   "ssh_private_key": "",
-  "region": "$AWS_REGION",
+  "region": "$aws_region",
   "encrypted": false
 }
 EOF
 
-read -r -d '' director_configuration <<EOF
+cat > director_config.yml <<EOF
 {
   "ntp_servers_string": "0.amazon.pool.ntp.org,1.amazon.pool.ntp.org,2.amazon.pool.ntp.org,3.amazon.pool.ntp.org",
   "resurrector_enabled": true,
@@ -41,17 +44,17 @@ read -r -d '' director_configuration <<EOF
   },
   "blobstore_type": "s3",
   "s3_blobstore_options": {
-    "endpoint": "$S3_ENDPOINT",
+    "endpoint": "$s3_endpoint",
     "bucket_name": "$s3_pcf_bosh",
     "access_key": "$aws_access_key_id",
     "secret_key": "$aws_secret_access_key",
     "signature_version": "4",
-    "region": "$AWS_REGION"
+    "region": "$aws_region"
   }
 }
 EOF
 
-resource_configuration=$(cat <<-EOF
+cat > resource_configuration.yml <<-EOF
 {
   "director": {
     "instance_type": {
@@ -60,19 +63,19 @@ resource_configuration=$(cat <<-EOF
   }
 }
 EOF
-)
 
-read -r -d '' az_configuration <<EOF
+
+cat > az_configuration.yml <<EOF
 {
   "availability_zones": [
-    { "name": "$az1" },
-    { "name": "$az2" },
-    { "name": "$az3" }
+    { "name": "$aws_az1" },
+    { "name": "$aws_az2" },
+    { "name": "$aws_az3" }
   ]
 }
 EOF
 
-read -r -d '' networks_configuration <<EOF
+cat > networks_configuration.yml <<EOF
 {
   "icmp_checks_enabled": false,
   "networks": [
@@ -184,14 +187,14 @@ read -r -d '' networks_configuration <<EOF
 }
 EOF
 
-read -r -d '' network_assignment <<EOF
+cat > network_assignment.yml <<EOF
 {
   "singleton_availability_zone": "$az1",
   "network": "infrastructure"
 }
 EOF
 
-read -r -d '' security_configuration <<EOF
+cat > security_configuration.yml <<EOF
 {
   "trusted_certificates": "",
   "vm_password_type": "generate"
@@ -199,15 +202,9 @@ read -r -d '' security_configuration <<EOF
 EOF
 set -e
 
-iaas_configuration=$(
-  echo "$iaas_configuration" |
-  jq --arg ssh_private_key "$PEM" '.ssh_private_key = $ssh_private_key'
-)
+cat iaas_configuration.yml | jq --arg ssh_private_key "$PEM" '.ssh_private_key = $ssh_private_key' > tmp.json && mv tmp.json iaas_configuration.yml
 
-security_configuration=$(
-  echo "$security_configuration" |
-  jq --arg certs "$TRUSTED_CERTIFICATES" '.trusted_certificates = $certs'
-)
+jq --arg certs "$TRUSTED_CERTIFICATES" '.trusted_certificates = $certs' security_configuration.yml > tmp.json && mv tmp.json security_configuration.yml
 
 jsons=(
   "$iaas_configuration"
@@ -219,21 +216,22 @@ jsons=(
   "$resource_configuration"
 )
 
-for json in "${jsons[@]}"; do
-  # ensure JSON is valid
-  echo "$json" | jq '.'
-done
+jq '.' iaas_configuration.yml director_configuration.yml az_configuration.yml networks_configuration.yml network_assignment.yml security_configuration.yml resource_configuration.yml
 
-om-linux \
-  --target https://${OPSMAN_DOMAIN_OR_IP_ADDRESS} \
-  --skip-ssl-validation \
-  --username "$OPSMAN_USER" \
-  --password "$OPSMAN_PASSWORD" \
-  configure-bosh \
-  --iaas-configuration "$iaas_configuration" \
-  --director-configuration "$director_configuration" \
-  --az-configuration "$az_configuration" \
-  --networks-configuration "$networks_configuration" \
-  --network-assignment "$network_assignment" \
-  --security-configuration "$security_configuration" \
-  --resource-configuration "$resource_configuration"
+popd
+
+cp -a config config-out
+
+#om-linux \
+#  --target https://${OPSMAN_DOMAIN_OR_IP_ADDRESS} \
+#  --skip-ssl-validation \
+#  --username "$opsman_user" \
+#  --password "$opsman_password" \
+#  configure-bosh \
+#  --iaas-configuration "$iaas_configuration" \
+#  --director-configuration "$director_configuration" \
+#  --az-configuration "$az_configuration" \
+#  --networks-configuration "$networks_configuration" \
+#  --network-assignment "$network_assignment" \
+#  --security-configuration "$security_configuration" \
+#  --resource-configuration "$resource_configuration"

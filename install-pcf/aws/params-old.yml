@@ -1,4 +1,3 @@
-# AMI to use for nat box
 amis_nat: ami-303b1458
 
 # This key must be a key with admin access

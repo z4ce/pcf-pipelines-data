@@ -1,7 +1,8 @@
 #!/bin/bash
 
 set -eu
-
+eval "$(goyamlenv config/aws.yml)"
+eval "$(goyamlenv <(echo "$secrets"))"
 ami=$(cat ami/ami)
 
 OPSMAN_ALLOW_SSH=0

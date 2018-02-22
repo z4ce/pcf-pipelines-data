@@ -19,9 +19,9 @@ fi
 
 # Terminate all OpsMen before terraforming
 aws configure << EOF
-$AWS_ACCESS_KEY_ID
-$AWS_SECRET_ACCESS_KEY
-$AWS_REGION
+$aws_access_key_id
+$aws_secret_access_key
+$aws_region
 json
 EOF
 
@@ -42,9 +42,9 @@ terraform init
 
 terraform destroy \
   -force \
-  -var "aws_access_key_id=${AWS_ACCESS_KEY_ID}" \
-  -var "aws_secret_access_key=${AWS_SECRET_ACCESS_KEY}" \
-  -var "aws_region=${AWS_REGION}" \
+  -var "aws_access_key_id=${aws_access_key_id}" \
+  -var "aws_secret_access_key=${aws_secret_access_key}" \
+  -var "aws_region=${aws_region}" \
   -var "opsman_ami=dontcare" \
   -var "db_master_username=dontcare" \
   -var "db_master_password=dontcare" \

@@ -1,16 +1,18 @@
 #!/bin/bash
 
 set -eu
+eval "$(goyamlenv config/aws.yml)"
+eval "$(goyamlenv <(echo "$secrets"))"
 
-until $(curl --output /dev/null -k --silent --head --fail https://$OPSMAN_DOMAIN_OR_IP_ADDRESS/setup); do
+until $(curl --output /dev/null -k --silent --head --fail https://$opsman_domain_or_ip_address/setup); do
     printf '.'
     sleep 5
 done
 
 om-linux \
-  --target https://$OPSMAN_DOMAIN_OR_IP_ADDRESS \
+  --target https://$opsman_domain_or_ip_address \
   --skip-ssl-validation \
   configure-authentication \
-  --username "$OPS_MGR_USR" \
-  --password "$OPS_MGR_PWD" \
-  --decryption-passphrase $OM_DECRYPTION_PWD
+  --username "$opsman_admin_username" \
+  --password "$opsman_admin_password" \
+  --decryption-passphrase $opsman_decryption_pwd
