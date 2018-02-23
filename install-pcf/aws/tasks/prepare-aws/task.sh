@@ -31,7 +31,7 @@ terraform plan \
   -var "opsman_allow_ssh_cidr_ranges=${OPSMAN_ALLOW_SSH_CIDR_LIST}" \
   -var "opsman_allow_https=${OPSMAN_ALLOW_HTTPS}" \
   -var "opsman_allow_https_cidr_ranges=${OPSMAN_ALLOW_HTTPS_CIDR_LIST}" \
-  -var "aws_access_key_id=${aws_access_key_id}" \
+  -var "aws_access_key_id=${aws_access_key}" \
   -var "aws_secret_access_key=${aws_secret_access_key}" \
   -var "aws_key_name=${aws_key_name}" \
   -var "aws_cert_arn=${aws_cert_arn}" \
