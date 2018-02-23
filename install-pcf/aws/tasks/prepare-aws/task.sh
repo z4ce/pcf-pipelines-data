@@ -28,9 +28,9 @@ terraform plan \
   -var "db_master_password=${db_master_password}" \
   -var "prefix=${terraform_prefix}" \
   -var "opsman_allow_ssh=${OPSMAN_ALLOW_SSH}" \
-  -var "opsman_allow_ssh_cidr_ranges=${opsman_allow_ssh_cidr_list}" \
+  -var "opsman_allow_ssh_cidr_ranges=${OPSMAN_ALLOW_SSH_CIDR_LIST}" \
   -var "opsman_allow_https=${OPSMAN_ALLOW_HTTPS}" \
-  -var "opsman_allow_https_cidr_ranges=${opsman_allow_https_cidr_list}" \
+  -var "opsman_allow_https_cidr_ranges=${OPSMAN_ALLOW_HTTPS_CIDR_LIST}" \
   -var "aws_access_key_id=${aws_access_key_id}" \
   -var "aws_secret_access_key=${aws_secret_access_key}" \
   -var "aws_key_name=${aws_key_name}" \
