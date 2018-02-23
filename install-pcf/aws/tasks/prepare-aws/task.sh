@@ -7,14 +7,14 @@ ami=$(cat ami/ami)
 
 OPSMAN_ALLOW_SSH=0
 OPSMAN_ALLOW_SSH_CIDR_LIST='["0.0.0.0/32"]'
-if [[ -n "${OPSMAN_ALLOW_SSH_CIDR_RANGES// }" ]]; then
+if [[ -n "${opsman_allow_ssh_cidr_ranges// }" ]]; then
   OPSMAN_ALLOW_SSH=1
   OPSMAN_ALLOW_SSH_CIDR_LIST='["'${opsman_allow_ssh_cidr_ranges//\,/\"\,\"}'"]'
 fi
 
 OPSMAN_ALLOW_HTTPS=0
 OPSMAN_ALLOW_HTTPS_CIDR_LIST='["0.0.0.0/32"]'
-if [[ -n "${OPSMAN_ALLOW_HTTPS_CIDR_RANGES// }" ]]; then
+if [[ -n "${opsman_allow_https_cidr_ranges// }" ]]; then
   OPSMAN_ALLOW_HTTPS=1
   OPSMAN_ALLOW_HTTPS_CIDR_LIST='["'${opsman_allow_https_cidr_ranges//\,/\"\,\"}'"]'
 fi

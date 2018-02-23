@@ -6,6 +6,7 @@ image_resource:
   source:
     repository: z4ce/rootfs-goyamlenv
 inputs:
+  - name: config
   - name: pcf-pipelines 
   - name: terraform-state
 outputs:
