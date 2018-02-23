@@ -4,7 +4,7 @@ platform: linux
 image_resource:
   type: docker-image
   source:
-    repository: czero/rootfs
+    repository: z4ce/rootfs-goyamlenv
 inputs:
   - name: pcf-pipelines 
   - name: config
