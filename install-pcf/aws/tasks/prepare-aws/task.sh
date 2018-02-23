@@ -9,14 +9,14 @@ OPSMAN_ALLOW_SSH=0
 OPSMAN_ALLOW_SSH_CIDR_LIST='["0.0.0.0/32"]'
 if [[ -n "${OPSMAN_ALLOW_SSH_CIDR_RANGES// }" ]]; then
   OPSMAN_ALLOW_SSH=1
-  OPSMAN_ALLOW_SSH_CIDR_LIST='["'${OPSMAN_ALLOW_SSH_CIDR_RANGES//\,/\"\,\"}'"]'
+  OPSMAN_ALLOW_SSH_CIDR_LIST='["'${opsman_allow_ssh_cidr_ranges//\,/\"\,\"}'"]'
 fi
 
 OPSMAN_ALLOW_HTTPS=0
 OPSMAN_ALLOW_HTTPS_CIDR_LIST='["0.0.0.0/32"]'
 if [[ -n "${OPSMAN_ALLOW_HTTPS_CIDR_RANGES// }" ]]; then
   OPSMAN_ALLOW_HTTPS=1
-  OPSMAN_ALLOW_HTTPS_CIDR_LIST='["'${OPSMAN_ALLOW_HTTPS_CIDR_RANGES//\,/\"\,\"}'"]'
+  OPSMAN_ALLOW_HTTPS_CIDR_LIST='["'${opsman_allow_https_cidr_ranges//\,/\"\,\"}'"]'
 fi
 
 terraform init pcf-pipelines/install-pcf/aws/terraform
@@ -24,13 +24,13 @@ terraform init pcf-pipelines/install-pcf/aws/terraform
 terraform plan \
   -state terraform-state/terraform.tfstate \
   -var "opsman_ami=${ami}" \
-  -var "db_master_username=${DB_MASTER_USERNAME}" \
-  -var "db_master_password=${DB_MASTER_PASSWORD}" \
-  -var "prefix=${TERRAFORM_PREFIX}" \
-  -var "opsman_allow_ssh=${OPSMAN_ALLOW_SSH}" \
-  -var "opsman_allow_ssh_cidr_ranges=${OPSMAN_ALLOW_SSH_CIDR_LIST}" \
-  -var "opsman_allow_https=${OPSMAN_ALLOW_HTTPS}" \
-  -var "opsman_allow_https_cidr_ranges=${OPSMAN_ALLOW_HTTPS_CIDR_LIST}" \
+  -var "db_master_username=${db_master_username}" \
+  -var "db_master_password=${db_master_password}" \
+  -var "prefix=${terraform_prefix}" \
+  -var "opsman_allow_ssh=${opsman_allow_ssh}" \
+  -var "opsman_allow_ssh_cidr_ranges=${opsman_allow_ssh_cidr_list}" \
+  -var "opsman_allow_https=${opsman_allow_https}" \
+  -var "opsman_allow_https_cidr_ranges=${opsman_allow_https_cidr_list}" \
   -var "aws_access_key_id=${aws_access_key_id}" \
   -var "aws_secret_access_key=${aws_secret_access_key}" \
   -var "aws_key_name=${aws_key_name}" \
