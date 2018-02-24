@@ -12,5 +12,6 @@ inputs:
 outputs:
   - name: config-out
 params:
+  secrets: ((aws_secrets))
 run:
   path: pcf-pipelines/install-pcf/aws/tasks/config-director/task.sh
