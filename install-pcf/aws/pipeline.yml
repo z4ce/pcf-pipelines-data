@@ -105,8 +105,7 @@ jobs:
     file: pcf-pipelines/tasks/config-opsman/task.yml
   - task: configure-director
     file: pcf-pipelines/install-pcf/aws/tasks/config-director/task.yml
-  - put: config-out
-    resource: config
+  - put: config
     params:
      repository: config-out
 - name: wipe-env

@@ -13,7 +13,8 @@ do
   `echo "$line" | awk '{print "export "$1"="$3}'`
 done < <(terraform output -state terraform-state/terraform.tfstate)
 
-pushd config/director
+git clone config config-out
+pushd config-out/director
 
 set +e
 cat > iaas_configuration.yml <<EOF
@@ -210,9 +211,7 @@ jq '.' iaas_configuration.yml director_configuration.yml az_configuration.yml ne
 
 popd
 
-cp -a config config-out
 cd config-out
-git add .
 git commit -m "Committed infrastructure data"
 
 #om-linux \
