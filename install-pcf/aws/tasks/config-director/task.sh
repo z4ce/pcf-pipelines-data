@@ -212,6 +212,8 @@ jq '.' iaas_configuration.yml director_configuration.yml az_configuration.yml ne
 popd
 
 cd config-out
+git config --global user.email "pcfpipelines@example.com"
+git config --global user.name "PCF Pipelines"
 git commit -m "Committed infrastructure data"
 
 #om-linux \
