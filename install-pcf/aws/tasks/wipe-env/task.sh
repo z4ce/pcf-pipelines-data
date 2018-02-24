@@ -14,8 +14,8 @@ if [[ $opsman_available == "available" ]]; then
   om-linux \
     --target "https://${opsman_domain_or_ip_address}" \
     --skip-ssl-validation \
-    --username "$opsman_username" \
-    --password "$opsman_password" \
+    --username "$opsman_admin_username" \
+    --password "$opsman_admin_password" \
     delete-installation
 fi
 
