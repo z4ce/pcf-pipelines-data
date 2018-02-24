@@ -2,6 +2,8 @@
 set -eu
 
 root=$(pwd)
+eval "$(goyamlenv config/aws.yml)"
+eval "$(goyamlenv <(echo "$secrets"))"
 
 cd pcf-pipelines/install-pcf/aws/terraform
 
