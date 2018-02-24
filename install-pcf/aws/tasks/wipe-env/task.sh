@@ -21,7 +21,7 @@ fi
 
 # Terminate all OpsMen before terraforming
 aws configure << EOF
-$aws_access_key_id
+$aws_access_key
 $aws_secret_access_key
 $aws_region
 json
