@@ -7,13 +7,13 @@ cd pcf-pipelines/install-pcf/aws/terraform
 
 source "${root}/pcf-pipelines/functions/check_opsman_available.sh"
 
-opsman_available=$(check_opsman_available $OPSMAN_DOMAIN_OR_IP_ADDRESS)
+opsman_available=$(check_opsman_available $opsman_domain_or_ip_address)
 if [[ $opsman_available == "available" ]]; then
   om-linux \
-    --target "https://${OPSMAN_DOMAIN_OR_IP_ADDRESS}" \
+    --target "https://${opsman_domain_or_ip_address}" \
     --skip-ssl-validation \
-    --username "$OPSMAN_USERNAME" \
-    --password "$OPSMAN_PASSWORD" \
+    --username "$opsman_username" \
+    --password "$opsman_password" \
     delete-installation
 fi
 

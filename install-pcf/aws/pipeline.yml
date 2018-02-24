@@ -118,5 +118,6 @@ jobs:
   - aggregate:
     - get: pcf-pipelines
     - get: terraform-state
+    - get: config
   - task: wipe
     file: pcf-pipelines/install-pcf/aws/tasks/wipe-env/task.yml
