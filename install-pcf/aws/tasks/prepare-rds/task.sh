@@ -21,7 +21,7 @@ GRANT ALL ON locket.* TO '$db_locket_username'@'%';
 
 CREATE DATABASE IF NOT EXISTS silk;
 CREATE USER IF NOT EXISTS '$db_silk_username' IDENTIFIED BY '$db_silk_password';
-GRANT ALL ON silk.* TO '$DB_SILK_USERNAME'@'%';
+GRANT ALL ON silk.* TO '$db_silk_username'@'%';
 
 CREATE DATABASE IF NOT EXISTS uaa;
 CREATE USER IF NOT EXISTS '$db_uaa_username' IDENTIFIED BY '$db_uaa_password';
