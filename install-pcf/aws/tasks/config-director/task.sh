@@ -214,6 +214,7 @@ popd
 cd config-out
 git config --global user.email "pcfpipelines@example.com"
 git config --global user.name "PCF Pipelines"
+git add .
 git commit -m "Committed infrastructure data"
 
 #om-linux \
