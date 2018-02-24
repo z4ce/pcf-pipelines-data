@@ -8,12 +8,12 @@ aws_access_key_id=`terraform state show -state terraform-state/terraform.tfstate
 aws_secret_access_key=`terraform state show -state terraform-state/terraform.tfstate aws_iam_access_key.pcf_iam_user_access_key | grep ^secret | awk '{print $3}'`
 rds_password=`terraform state show -state terraform-state/terraform.tfstate aws_db_instance.pcf_rds | grep ^password | awk '{print $3}'`
 
-pushd config/director
 while read -r line
 do
   `echo "$line" | awk '{print "export "$1"="$3}'`
 done < <(terraform output -state terraform-state/terraform.tfstate)
 
+pushd config/director
 
 set +e
 cat > iaas_configuration.yml <<EOF
