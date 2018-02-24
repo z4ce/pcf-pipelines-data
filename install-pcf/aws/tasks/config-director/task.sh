@@ -29,7 +29,7 @@ cat > iaas_configuration.yml <<EOF
 }
 EOF
 
-cat > director_config.yml <<EOF
+cat > director_configuration.yml <<EOF
 {
   "ntp_servers_string": "0.amazon.pool.ntp.org,1.amazon.pool.ntp.org,2.amazon.pool.ntp.org,3.amazon.pool.ntp.org",
   "resurrector_enabled": true,
