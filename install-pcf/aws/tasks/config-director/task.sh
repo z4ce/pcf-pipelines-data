@@ -211,6 +211,9 @@ jq '.' iaas_configuration.yml director_configuration.yml az_configuration.yml ne
 popd
 
 cp -a config config-out
+cd config-out
+git add .
+git commit -m "Committed infrastructure data"
 
 #om-linux \
 #  --target https://${OPSMAN_DOMAIN_OR_IP_ADDRESS} \

@@ -107,6 +107,8 @@ jobs:
     file: pcf-pipelines/install-pcf/aws/tasks/config-director/task.yml
   - put: config-out
     resource: config
+    params:
+     repository: config-out
 - name: wipe-env
   serial_groups: [terraform]
   ensure:
