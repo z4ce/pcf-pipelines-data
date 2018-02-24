@@ -64,5 +64,5 @@ CREATE USER IF NOT EXISTS '$db_networkpolicyserverdb_username' IDENTIFIED BY '$d
 GRANT ALL ON networkpolicyserver.* TO '$db_networkpolicyserverdb_username'@'%';
 EOF
 
-scp -i pcf.pem -o StrictHostKeyChecking=no databases.sql "ubuntu@${OPSMAN_DOMAIN_OR_IP_ADDRESS}:/tmp/."
+scp -i pcf.pem -o StrictHostKeyChecking=no databases.sql "ubuntu@${opsman_domain_or_ip_address}:/tmp/."
 ssh -i pcf.pem -o StrictHostKeyChecking=no "ubuntu@${opsman_domain_or_ip_address}" "mysql -h $db_host -u $db_username -p$db_password < /tmp/databases.sql"
