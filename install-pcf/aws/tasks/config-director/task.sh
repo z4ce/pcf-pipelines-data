@@ -206,16 +206,6 @@ cat iaas_configuration.yml | jq --arg ssh_private_key "$PEM" '.ssh_private_key =
 
 jq --arg certs "$trusted_certificates" '.trusted_certificates = $certs' security_configuration.yml > tmp.json && mv tmp.json security_configuration.yml
 
-jsons=(
-  "$iaas_configuration"
-  "$director_configuration"
-  "$az_configuration"
-  "$networks_configuration"
-  "$network_assignment"
-  "$security_configuration"
-  "$resource_configuration"
-)
-
 jq '.' iaas_configuration.yml director_configuration.yml az_configuration.yml networks_configuration.yml network_assignment.yml security_configuration.yml resource_configuration.yml
 
 popd
